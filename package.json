@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "npm run copy:sql:wasm && ng serve",
-    "build:native": "npm run remove:sql:wasm && ng build",
+    "build:native": "npm run copy:sql:wasm && ng build",
     "watch": "npm run copy:sql:wasm && ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
