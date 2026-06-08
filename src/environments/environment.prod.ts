@@ -8,7 +8,7 @@ export const environment = {
     post_get_user: 'user',
     register: 'user/register',
     login: 'user/login',
-    guest: 'guest/',
+    guest: '3co/guest/',
     migrateGuest: '/register',
     products: '3co/products',
     reviews: '3co/reviews',
