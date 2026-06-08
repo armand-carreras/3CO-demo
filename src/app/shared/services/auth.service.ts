@@ -268,7 +268,7 @@ public async deleteUser() {
      */
   public async migrateGuest(user: string, email: string, password: string, gender?: string): Promise<any> {
     const guestID = await this.storage.getGuestID();
-    const URL = environment.paths.base_api+"guest"+environment.paths.migrateGuest;
+    const URL = environment.paths.base_api+environment.paths.migrateGuest;
     const hashPassword = crypto.SHA256(password).toString();
     const body = {
       "guest": guestID,

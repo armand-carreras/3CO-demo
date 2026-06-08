@@ -13,7 +13,7 @@ export const environment = {
     register: 'user/register',
     login: 'user/login',
     guest: '3co/guest/',
-    migrateGuest: '/register',
+    migrateGuest: '3co/guest/register',
     products: '3co/products',
     reviews: '3co/reviews',
     recover: 'user/password_recovery',
