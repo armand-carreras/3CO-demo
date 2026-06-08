@@ -1,0 +1,119 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ThemeService } from './shared/services/theme.service';
+import { StorageService } from './shared/services/storage.service';
+import { InitializeAppService } from './shared/services/SQLite/initialize.app.service';
+import { Platform, ToastController } from '@ionic/angular';
+import { Location } from '@angular/common';
+import { App } from '@capacitor/app';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { LabelSQLiteHandlerService } from './shared/services/SQLite/label-sqlite-handler.service';
+import { TranslateService } from '@ngx-translate/core';
+import { I18nHandlerService } from './shared/services/i18n-handler.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
+  standalone: false,
+})
+export class AppComponent implements OnInit, OnDestroy {
+
+
+  private lastBackPress = 0;
+  private timePeriodToExit = 2000;
+
+  private subscription!: Subscription;
+
+
+  constructor(
+    private themeServ: ThemeService,
+    private storageServ: StorageService,
+    private platform: Platform,
+    private i18nHandler: I18nHandlerService,
+    private initSQLite: InitializeAppService,
+    private labelSQLite: LabelSQLiteHandlerService,
+    private location: Location,
+    private router: Router,
+    private toastController: ToastController,
+    private translate: TranslateService
+  ) {
+
+    this.initializeApp();
+    this.translate.addLangs(['ca-ES', 'de-DE', 'en-GB', 'es-ES', 'fr-FR', 'it-IT']);
+    this.translate.use('en-GB'); // default
+  }
+
+
+
+
+  async ngOnInit() {
+
+    await this.storageServ.init();
+    await this.initSQLite.initializeApp();
+    if (this.initSQLite.isAppInit) {
+      await this.labelSQLite.getRandomLabel();
+      await this.labelSQLite.getAll();
+    } else {
+      console.warn('SQLite initialization failed — skipping database queries');
+    }
+    await this.themeServ.initTheme();
+    await this.i18nHandler.init();
+  }
+
+
+  ngOnDestroy(): void {
+    this.subscription.closed ?? this.subscription.unsubscribe();
+  }
+
+
+
+
+
+
+  initializeApp() {
+
+    this.platform.ready().then(() => {
+      this.handleBackButton();
+      /* if (rdySource === 'dom') {
+        defineCustomElements(window);
+      } */
+    });
+  }
+
+  handleBackButton() {
+    this.subscription = this.platform.backButton.subscribeWithPriority(9999, async () => {
+      const currentUrl = this.router.url.split('?')[0]; // Strip query params
+      const rootTabRoutes = ['/tabs/labels', '/tabs/product', '/tabs/learn', 'tabs/account']; // <- Update these!
+
+      // CASE 1: If there's navigation history → go back
+      if (window.history.length > 1 && !rootTabRoutes.includes(currentUrl)) {
+        this.location.back();
+        return;
+      }
+      else {
+        const currentTime = new Date().getTime();
+
+        if (currentTime - this.lastBackPress < this.timePeriodToExit) {
+          console.log('Exiting app...');
+          App.minimizeApp();
+        } else {
+          this.lastBackPress = currentTime;
+          const toast = await this.toastController.create({
+            message: 'Press back again to exit',
+            duration: 2000,
+            position: 'top',
+            cssClass: 'backtoast'
+          });
+          await toast.present();
+        }
+      }
+    });
+
+
+
+  }
+
+
+
+}

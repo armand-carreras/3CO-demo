@@ -1,0 +1,63 @@
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, provideZoneChangeDetection } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { StorageService } from './shared/services/storage.service';
+import { ThemeService } from './shared/services/theme.service';
+import { SQLiteService } from './shared/services/SQLite/sqlite.service';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { provideHttpClient} from '@angular/common/http';
+import { SplashScreenComponent } from './shared/components/splash-screen/splash-screen.component';
+import { SystemBarsService } from './shared/services/system-bars.service';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateService, TranslateDirective, TranslatePipe } from '@ngx-translate/core';
+import { I18nHandlerService } from './shared/services/i18n-handler.service';
+import { AnylangService } from './shared/services/anylang.service';
+
+
+
+
+
+@NgModule({
+  declarations: [AppComponent, SplashScreenComponent],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    IonicStorageModule.forRoot(),
+    TranslatePipe,
+    TranslateDirective,
+  ],
+  providers: [
+    StorageService,
+    ThemeService,
+    SystemBarsService,
+    SQLiteService,
+    I18nHandlerService,
+    AnylangService,
+    provideHttpClient(),
+    { 
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    },
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideTranslateService({
+      lang: 'en-GB',
+      fallbackLang: 'en-GB',
+      loader: provideTranslateHttpLoader()
+    }),
+  ],
+  exports: [
+    TranslatePipe,
+    TranslateDirective
+  ],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class AppModule {
+
+}

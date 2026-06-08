@@ -1,0 +1,102 @@
+
+
+<ng-container *ngIf="!editMode else editTemplate">
+  
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button fill="clear" (click)="goBack()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title color="primary">{{'personal-details.profile'|translate}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="edit()">
+          <ion-icon color="tertiary" name="create-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    
+    <div class="profile-info-container">
+    
+      <div class="user-image-container">
+        <img [src]=user.avatarImg>
+      </div>
+
+      <div class="profile-info">
+        <div class="info-piece">
+          <ion-text color="primary">{{'personal-details.name'|translate}}</ion-text>
+          <div class="var-container"> <ion-note color="secondary">{{user.name}}</ion-note></div>
+        </div>
+        <div class="info-piece">
+          <ion-text color="primary">{{'personal-details.email'|translate}}</ion-text>
+          <div class="var-container"><ion-note color="secondary">{{user.email}}</ion-note></div>
+        </div>
+      </div>
+
+      <div class="account-management-container">
+        <ion-button (click)="logout()" shape="round" color="tertiary">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </ion-button>
+        <ion-button [disabled]="isUserGuest" (click)="deleteAccount()" shape="round" color="danger">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+    </div>
+  </ion-content>
+
+  </ng-container>
+
+
+
+
+
+<ng-template #editTemplate>
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button fill="clear" (click)="editMode = !editMode">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title color="primary">{{'personal-details.edit-profile'|translate}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button size="small" color="tertiary" fill="clear" (click)="done()">
+          {{'personal-details.done'|translate}}
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <div class="profile-info-container">
+    
+      <div class="user-image-container">
+        <img [src]=user.avatarImg>
+      </div>
+
+      <div class="profile-info">
+        <div class="info-piece">
+          <ion-input fill="outline" shape="round" type="text" labelPlacement="stacked" label="{{'personal-details.name'|translate}}" [(ngModel)]="newName"></ion-input>
+        </div>
+        <div class="info-piece">
+          <ion-input [disabled]="true" fill="outline" shape="round" type="email" labelPlacement="stacked" label="{{'personal-details.email'|translate}}" [(ngModel)]="newEmail"></ion-input>
+        </div>
+        <div class="info-piece">
+          <ion-input fill="outline" shape="round" type="password" labelPlacement="stacked" label="{{'personal-details.password'|translate}}" [(ngModel)]="newPassword">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </div>
+      </div>
+
+
+    </div>
+  </ion-content>
+ 
+
+</ng-template>

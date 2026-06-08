@@ -1,0 +1,19 @@
+<div class="recently-added-products">
+  <div class="product-container">
+    <img [src]="product.image!='' ? product.image : '/assets/databases/No_Image_Available.jpg'"
+      alt="No Image Available">
+    <div class="product-info-container">
+      <div class="product-name-container">
+        <ion-text>{{product.name | truncate:20}}</ion-text>
+      </div>
+      <ion-text color="medium">{{product.description | truncate:50}}</ion-text>
+    </div>
+    <div class="product-rating-category-container">
+      <div class="product-rating-container">
+        <ion-text>{{product.rating}}</ion-text>
+        <ion-icon color="warning" name="star"></ion-icon>
+      </div>
+      <ion-icon class="product-category-icon" name="{{getCategoryIcon(product.categories[0])}}"></ion-icon>
+    </div>
+  </div>
+</div>
